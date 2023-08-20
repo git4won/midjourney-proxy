@@ -7,6 +7,8 @@ import com.github.novicezk.midjourney.support.DiscordHelper;
 import com.github.novicezk.midjourney.support.Task;
 import com.github.novicezk.midjourney.support.TaskCondition;
 import com.github.novicezk.midjourney.support.TaskQueueHelper;
+import com.github.novicezk.midjourney.util.ImageProcessUtils;
+
 import net.dv8tion.jda.api.utils.data.DataArray;
 import net.dv8tion.jda.api.utils.data.DataObject;
 
@@ -38,6 +40,13 @@ public abstract class MessageHandler {
 		}
 		task.setImageUrl(getImageUrl(message));
 		task.setProperty(Constants.TASK_PROPERTY_FINAL_PROMPT, finalPrompt);
+
+		int[] dimensions = ImageProcessUtils.getWidthAndHeightFromPicURL(getImageUrl(message));
+		Task.ImageProperties properties =  task.new ImageProperties();
+		properties.setWidth(dimensions[0]);
+		properties.setHeight(dimensions[1]);
+		task.setImageProperties(properties);
+
 		finishTask(task, message);
 		task.awake();
 	}

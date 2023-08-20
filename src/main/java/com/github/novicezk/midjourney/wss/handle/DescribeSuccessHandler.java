@@ -4,6 +4,8 @@ import com.github.novicezk.midjourney.Constants;
 import com.github.novicezk.midjourney.enums.MessageType;
 import com.github.novicezk.midjourney.service.TranslateService;
 import com.github.novicezk.midjourney.support.Task;
+import com.github.novicezk.midjourney.util.ImageProcessUtils;
+
 import net.dv8tion.jda.api.utils.data.DataArray;
 import net.dv8tion.jda.api.utils.data.DataObject;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -44,6 +46,11 @@ public class DescribeSuccessHandler extends MessageHandler {
 		task.setPromptEn(description);
 		task.setProperty(Constants.TASK_PROPERTY_FINAL_PROMPT, description);
 		task.setImageUrl(replaceCdnUrl(imageUrl));
+		int[] dimensions = ImageProcessUtils.getWidthAndHeightFromPicURL(getImageUrl(message));
+		Task.ImageProperties properties =  task.new ImageProperties();
+		properties.setWidth(dimensions[0]);
+		properties.setHeight(dimensions[1]);
+		task.setImageProperties(properties);
 		finishTask(task, message);
 		task.awake();
 	}

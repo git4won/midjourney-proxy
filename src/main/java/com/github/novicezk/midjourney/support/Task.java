@@ -18,6 +18,15 @@ public class Task implements Serializable {
 	@Serial
 	private static final long serialVersionUID = -674915748204390789L;
 
+	@Data
+	@ApiModel("图片属性")
+	public class ImageProperties {
+		@ApiModelProperty("宽")
+		private int width;
+		@ApiModelProperty("高")
+		private int height;
+	}
+
 	private TaskAction action;
 	@ApiModelProperty("任务ID")
 	private String id;
@@ -38,6 +47,8 @@ public class Task implements Serializable {
 	private Long finishTime;
 	@ApiModelProperty("图片url")
 	private String imageUrl;
+	@ApiModelProperty("图片属性")
+	private ImageProperties imageProperties;
 	@ApiModelProperty("任务状态")
 	private TaskStatus status = TaskStatus.NOT_START;
 	@ApiModelProperty("任务进度")

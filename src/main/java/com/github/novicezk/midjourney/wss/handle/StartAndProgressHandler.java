@@ -9,6 +9,8 @@ import com.github.novicezk.midjourney.support.Task;
 import com.github.novicezk.midjourney.support.TaskCondition;
 import com.github.novicezk.midjourney.util.ContentParseData;
 import com.github.novicezk.midjourney.util.ConvertUtils;
+import com.github.novicezk.midjourney.util.ImageProcessUtils;
+
 import lombok.extern.slf4j.Slf4j;
 import net.dv8tion.jda.api.utils.data.DataArray;
 import net.dv8tion.jda.api.utils.data.DataObject;
@@ -54,6 +56,13 @@ public class StartAndProgressHandler extends MessageHandler {
 			task.setStatus(TaskStatus.IN_PROGRESS);
 			task.setProgress(parseData.getStatus());
 			task.setImageUrl(getImageUrl(message));
+
+			int[] dimensions = ImageProcessUtils.getWidthAndHeightFromPicURL(getImageUrl(message));
+			Task.ImageProperties properties =  task.new ImageProperties();
+			properties.setWidth(dimensions[0]);
+			properties.setHeight(dimensions[1]);
+			task.setImageProperties(properties);
+			
 			task.awake();
 		}
 	}
